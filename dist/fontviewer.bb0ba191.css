@@ -1,0 +1,57 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial;
+  font-size: 14px;
+  color: #6b747c;
+  background-color: #f7f8fc;
+  background: linear-gradient(to top left, #f7f8fc, rgba(0, 151, 230, 0.2) 500%);
+  margin: 0px;
+  padding-left: 2rem;
+  padding-right: 2rem; }
+
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: center; }
+  .container > * {
+    padding: 10px;
+    flex: 1 100%; }
+
+.main {
+  text-align: left;
+  flex: 3 0px;
+  padding-left: 250px; }
+
+.aside {
+  background: deepskyblue;
+  color: white;
+  position: fixed;
+  min-height: 100%;
+  width: 200px;
+  flex: 1 auto;
+  font-family: monospace;
+  line-height: 2rem;
+  text-align: left; }
+  .aside ul {
+    list-style-type: none; }
+    .aside ul li:hover {
+      color: grey;
+      cursor: pointer; }
+    .aside ul li.selected {
+      color: hotpink; }
+
+@media all and (max-width: 800px) {
+  body {
+    padding: 0px; }
+  .aside {
+    flex: 1 100%;
+    position: relative;
+    text-align: center; }
+    .aside ul li.selected {
+      color: white;
+      background-color: hotpink; }
+  .main {
+    flex: 1 100%;
+    padding-left: 10px; } }
+
+.glyphs {
+  font-family: initial; }
