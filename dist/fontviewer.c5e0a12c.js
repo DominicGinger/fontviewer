@@ -99,17 +99,22 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   // Override the current require with this new one
   return newRequire;
 })({3:[function(require,module,exports) {
-function showGlyphs(j) {
+function drawGlyphs(n) {
   var chars = '';
-  for (var i = 0; i < 16 * 16 * 16; i++) {
-    var value = String.fromCharCode(parseInt(i * j, 16));
+  var base = n * 16 * 16 * 16;
+  document.querySelector('.glyphs').innerHTML = '';
+  for (var i = base; i < base + 16 * 16 * 16; i++) {
+    var value = String.fromCharCode(i);
     chars += value + '\t';
   }
-  document.querySelector('.glyphs').innerHTML = chars;
+  document.querySelector('.glyphs').innerHTML += chars;
+  window.scrollTo(0, 0);
 }
-showGlyphs(1);
+
+drawGlyphs(0);
 
 var links = document.querySelectorAll('.aside li');
+var glyphs = document.querySelector('.glyphs');
 
 function removeSelected() {
   [].forEach.call(links, function (link) {
@@ -122,14 +127,41 @@ function addSelected(link) {
 }
 
 [].forEach.call(links, function (link, idx) {
-  console.log(link, idx);
   link.addEventListener('click', function (event) {
-    showGlyphs(idx + 1);
+    drawGlyphs(idx);
     removeSelected();
     addSelected(event.target);
   });
 });
-},{}],64:[function(require,module,exports) {
+
+document.querySelector('.font-family-selector').addEventListener('change', function (event) {
+  glyphs.style.fontFamily = event.target.value;
+});
+
+document.querySelector('.font-size-selector').addEventListener('change', function (event) {
+  glyphs.style.fontSize = event.target.value;
+});
+
+document.querySelector('.color-selector').addEventListener('change', function (event) {
+  glyphs.style.color = event.target.value;
+});
+
+document.querySelector('.file-reader').addEventListener('change', function (event) {
+  var file = event.target.files[0];
+  if (file) {
+    console.log(file);
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.addEventListener('load', function () {
+      var style = document.createElement('style');
+      style.type = 'text/css';
+      style.appendChild(document.createTextNode('\n        @font-face {\n          font-family: "' + file.name + '";\n          src: url(' + reader.result + ') format("woff");\n        }\n      '));
+      document.head.appendChild(style);
+      glyphs.style.fontFamily = '"' + file.name + '"';
+    });
+  }
+});
+},{}],6:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -158,7 +190,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '63090' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50862' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -299,5 +331,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[64,3], null)
+},{}]},{},[6,3], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map

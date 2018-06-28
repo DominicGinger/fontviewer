@@ -39,6 +39,8 @@ body {
   font-family: monospace;
   line-height: 2rem;
   text-align: left;
+  border-right: lightblue solid 2px;
+  border-left: lightblue solid 2px;
 
   ul {
     list-style-type: none;
@@ -63,6 +65,7 @@ body {
     flex: 1 100%;
     position: relative;
     text-align: center;
+    border: none;
 
     ul {
       li.selected {
@@ -79,5 +82,7 @@ body {
 
 .glyphs {
   font-family: initial;
+  font-size: 48px;
+  color: Dimgrey;
 }
 

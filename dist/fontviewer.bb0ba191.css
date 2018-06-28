@@ -30,7 +30,9 @@ body {
   flex: 1 auto;
   font-family: monospace;
   line-height: 2rem;
-  text-align: left; }
+  text-align: left;
+  border-right: lightblue solid 2px;
+  border-left: lightblue solid 2px; }
   .aside ul {
     list-style-type: none; }
     .aside ul li:hover {
@@ -45,7 +47,8 @@ body {
   .aside {
     flex: 1 100%;
     position: relative;
-    text-align: center; }
+    text-align: center;
+    border: none; }
     .aside ul li.selected {
       color: white;
       background-color: hotpink; }
@@ -54,4 +57,6 @@ body {
     padding-left: 10px; } }
 
 .glyphs {
-  font-family: initial; }
+  font-family: initial;
+  font-size: 48px;
+  color: Dimgrey; }
