@@ -59,4 +59,5 @@ body {
 .glyphs {
   font-family: initial;
   font-size: 48px;
-  color: Dimgrey; }
+  color: Dimgrey;
+  word-wrap: break-word; }

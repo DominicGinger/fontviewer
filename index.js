@@ -1,16 +1,31 @@
 function drawGlyphs(n) {
-  let chars = '';
+  currentPage = n;
   const base = n*16*16*16;
-  document.querySelector('.glyphs').innerHTML = '';
+  window.scrollTo(0, 0);
+  setTimeout(() => document.querySelector('.glyphs').innerHTML = '', 1);
+  let chars = '';
+  let span = document.createElement('span');
   for (let i = base; i < base+16*16*16; i++) {
     const value = String.fromCharCode(i);
-    chars += `${value}\t`;
+    const newSpan = document.createElement('span');
+    newSpan.innerHTML = `${value}\t`;
+    newSpan.classList.add('glyph');
+    span.appendChild(newSpan);
+
+    if (i%16 === 0) {
+      (q => setTimeout(() => {
+        if (q === currentPage) {
+          document.querySelector('.glyphs').appendChild(span)
+          span = document.createElement('span');
+        }
+      }, 1))(n);
+      chars = '';
+    }
   }
-  document.querySelector('.glyphs').innerHTML += chars;
-  window.scrollTo(0, 0);
 }
 
-drawGlyphs(0);
+let currentPage = 0;
+drawGlyphs(currentPage);
 
 const links = document.querySelectorAll('.aside li');
 const glyphs = document.querySelector('.glyphs');
@@ -48,7 +63,16 @@ document.querySelector('.color-selector').addEventListener('change', function(ev
 document.querySelector('.file-reader').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (file) {
-      console.log(file);
+    let arrayBuffer;
+    const arrayReader = new FileReader();
+    arrayReader.onload = function(event) {
+      arrayBuffer = event.target.result;
+      debugger;
+    };
+    arrayReader.readAsArrayBuffer(file);
+
+
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.addEventListener('load', function() {

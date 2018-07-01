@@ -100,18 +100,37 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({3:[function(require,module,exports) {
 function drawGlyphs(n) {
-  var chars = '';
+  currentPage = n;
   var base = n * 16 * 16 * 16;
-  document.querySelector('.glyphs').innerHTML = '';
+  window.scrollTo(0, 0);
+  setTimeout(function () {
+    return document.querySelector('.glyphs').innerHTML = '';
+  }, 1);
+  var chars = '';
+  var span = document.createElement('span');
   for (var i = base; i < base + 16 * 16 * 16; i++) {
     var value = String.fromCharCode(i);
-    chars += value + '\t';
+    var newSpan = document.createElement('span');
+    newSpan.innerHTML = value + '\t';
+    newSpan.classList.add('glyph');
+    span.appendChild(newSpan);
+
+    if (i % 16 === 0) {
+      (function (q) {
+        return setTimeout(function () {
+          if (q === currentPage) {
+            document.querySelector('.glyphs').appendChild(span);
+            span = document.createElement('span');
+          }
+        }, 1);
+      })(n);
+      chars = '';
+    }
   }
-  document.querySelector('.glyphs').innerHTML += chars;
-  window.scrollTo(0, 0);
 }
 
-drawGlyphs(0);
+var currentPage = 0;
+drawGlyphs(currentPage);
 
 var links = document.querySelectorAll('.aside li');
 var glyphs = document.querySelector('.glyphs');
@@ -149,7 +168,14 @@ document.querySelector('.color-selector').addEventListener('change', function (e
 document.querySelector('.file-reader').addEventListener('change', function (event) {
   var file = event.target.files[0];
   if (file) {
-    console.log(file);
+    var arrayBuffer = void 0;
+    var arrayReader = new FileReader();
+    arrayReader.onload = function (event) {
+      arrayBuffer = event.target.result;
+      debugger;
+    };
+    arrayReader.readAsArrayBuffer(file);
+
     var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.addEventListener('load', function () {
@@ -161,7 +187,7 @@ document.querySelector('.file-reader').addEventListener('change', function (even
     });
   }
 });
-},{}],6:[function(require,module,exports) {
+},{}],12:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -331,5 +357,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[6,3], null)
+},{}]},{},[12,3], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map
