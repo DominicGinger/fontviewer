@@ -130,7 +130,13 @@ function drawGlyphs(n) {
 }
 
 var currentPage = 0;
-drawGlyphs(currentPage);
+var canvas = document.querySelector('.canvas');
+canvas.style.width = '100%';
+canvas.style.height = '100%';
+
+canvas.style.width = canvas.width + 'px';
+canvas.width = canvas.offsetWidth;
+// drawGlyphs(currentPage);
 
 var links = document.querySelectorAll('.aside li');
 var glyphs = document.querySelector('.glyphs');
@@ -168,26 +174,64 @@ document.querySelector('.color-selector').addEventListener('change', function (e
 document.querySelector('.file-reader').addEventListener('change', function (event) {
   var file = event.target.files[0];
   if (file) {
-    var arrayBuffer = void 0;
+    var font = void 0;
     var arrayReader = new FileReader();
     arrayReader.onload = function (event) {
-      arrayBuffer = event.target.result;
-      debugger;
+      font = opentype.parse(event.target.result);
+
+      var t0 = performance.now();
+
+      var str = '';
+      for (var i = 0; i < 16 * 16 * 16 * 16; i++) {
+        str += String.fromCharCode(i);
+      }
+      var glyphsUnfiltered = font.stringToGlyphs(str);
+      var glyphs = glyphsUnfiltered.filter(function (glyph) {
+        return glyph.unicode !== undefined;
+      });
+
+      var t1 = performance.now();
+      console.log(glyphs);
+      console.log(t1 - t0);
+
+      var spacing = 75;
+      var x = spacing;
+      var y = spacing;
+      var width = canvas.width - spacing - spacing;
+
+      var height = 300 + spacing * (glyphs.length / (width / spacing));
+      canvas.style.height = height + 'px';
+      canvas.height = height;
+      var ctx = canvas.getContext('2d');
+      glyphs.forEach(function (glyph, index) {
+        if (x > width) {
+          console.log('down');
+          y += spacing;
+          x = spacing;
+        }
+        x += spacing;
+        glyph.draw(ctx, x, y);
+      });
     };
     arrayReader.readAsArrayBuffer(file);
 
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.addEventListener('load', function () {
-      var style = document.createElement('style');
-      style.type = 'text/css';
-      style.appendChild(document.createTextNode('\n        @font-face {\n          font-family: "' + file.name + '";\n          src: url(' + reader.result + ') format("woff");\n        }\n      '));
-      document.head.appendChild(style);
-      glyphs.style.fontFamily = '"' + file.name + '"';
-    });
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.addEventListener('load', function() {
+    //       const style = document.createElement('style');
+    //       style.type = 'text/css';
+    //       style.appendChild(document.createTextNode(`
+    //         @font-face {
+    //           font-family: "${file.name}";
+    //           src: url(${reader.result}) format("woff");
+    //         }
+    //       `));
+    //       document.head.appendChild(style);
+    //       glyphs.style.fontFamily = `"${file.name}"`;
+    //     });
   }
 });
-},{}],12:[function(require,module,exports) {
+},{}],14:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -357,5 +401,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[12,3], null)
+},{}]},{},[14,3], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map

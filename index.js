@@ -25,7 +25,13 @@ function drawGlyphs(n) {
 }
 
 let currentPage = 0;
-drawGlyphs(currentPage);
+const canvas = document.querySelector('.canvas');
+canvas.style.width = '100%';
+canvas.style.height = '100%';
+
+canvas.style.width = `${canvas.width}px`;
+canvas.width = canvas.offsetWidth;
+// drawGlyphs(currentPage);
 
 const links = document.querySelectorAll('.aside li');
 const glyphs = document.querySelector('.glyphs');
@@ -63,29 +69,60 @@ document.querySelector('.color-selector').addEventListener('change', function(ev
 document.querySelector('.file-reader').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (file) {
-    let arrayBuffer;
+    let font;
     const arrayReader = new FileReader();
     arrayReader.onload = function(event) {
-      arrayBuffer = event.target.result;
-      debugger;
+      font = opentype.parse(event.target.result);
+
+      const t0 = performance.now();
+
+      let str = '';
+      for (let i = 0; i < 16*16*16*16; i++) {
+        str += String.fromCharCode(i);
+      }
+      const glyphsUnfiltered = font.stringToGlyphs(str);
+      const glyphs = glyphsUnfiltered.filter(glyph => glyph.unicode !== undefined);
+
+      const t1 = performance.now();
+      console.log(glyphs);
+      console.log(t1 - t0);
+
+      const spacing = 75;
+      let x = spacing;
+      let y = spacing;
+      const width = canvas.width - spacing - spacing;
+
+      let height = 300 + (spacing * (glyphs.length/(width/spacing)));
+      canvas.style.height = `${height}px`;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      glyphs.forEach((glyph, index) => {
+        if (x > width) {
+          console.log('down');
+          y += spacing;
+          x = spacing;
+        }
+        x += spacing;
+        glyph.draw(ctx, x, y);
+      });
     };
     arrayReader.readAsArrayBuffer(file);
 
 
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.addEventListener('load', function() {
-      const style = document.createElement('style');
-      style.type = 'text/css';
-      style.appendChild(document.createTextNode(`
-        @font-face {
-          font-family: "${file.name}";
-          src: url(${reader.result}) format("woff");
-        }
-      `));
-      document.head.appendChild(style);
-      glyphs.style.fontFamily = `"${file.name}"`;
-    });
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.addEventListener('load', function() {
+    //       const style = document.createElement('style');
+    //       style.type = 'text/css';
+    //       style.appendChild(document.createTextNode(`
+    //         @font-face {
+//           font-family: "${file.name}";
+//           src: url(${reader.result}) format("woff");
+//         }
+//       `));
+//       document.head.appendChild(style);
+//       glyphs.style.fontFamily = `"${file.name}"`;
+//     });
   }
 });
