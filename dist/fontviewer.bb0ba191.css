@@ -8,6 +8,18 @@ body {
   padding-left: 2rem;
   padding-right: 2rem; }
 
+@font-face {
+  font-family: Gaegu;
+  src: url(/fonts/Gaegu-Regular.ttf); }
+
+@font-face {
+  font-family: Lato;
+  src: url(/Lato-Regular.ttf); }
+
+@font-face {
+  font-family: Monoton;
+  src: url(/fonts/Monoton-Regular.ttf); }
+
 .container {
   display: flex;
   flex-flow: row wrap;
@@ -60,4 +72,21 @@ body {
   font-family: initial;
   font-size: 48px;
   color: Dimgrey;
-  word-wrap: break-word; }
+  word-wrap: break-word;
+  display: flex;
+  flex-wrap: wrap; }
+  .glyphs .glyph {
+    flex: 1;
+    min-width: 96px;
+    max-width: 96px;
+    min-height: 96px;
+    max-height: 96px; }
+    .glyphs .glyph:hover {
+      cursor: pointer; }
+
+.details {
+  visibility: hidden;
+  position: absolute;
+  top: 50px;
+  left: 200px;
+  z-index: 10; }

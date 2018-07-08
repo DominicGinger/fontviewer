@@ -98,140 +98,101 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({3:[function(require,module,exports) {
-function drawGlyphs(n) {
-  currentPage = n;
-  var base = n * 16 * 16 * 16;
-  window.scrollTo(0, 0);
-  setTimeout(function () {
-    return document.querySelector('.glyphs').innerHTML = '';
-  }, 1);
-  var chars = '';
-  var span = document.createElement('span');
-  for (var i = base; i < base + 16 * 16 * 16; i++) {
-    var value = String.fromCharCode(i);
-    var newSpan = document.createElement('span');
-    newSpan.innerHTML = value + '\t';
-    newSpan.classList.add('glyph');
-    span.appendChild(newSpan);
-
-    if (i % 16 === 0) {
-      (function (q) {
-        return setTimeout(function () {
-          if (q === currentPage) {
-            document.querySelector('.glyphs').appendChild(span);
-            span = document.createElement('span');
-          }
-        }, 1);
-      })(n);
-      chars = '';
-    }
-  }
-}
-
-var currentPage = 0;
-var canvas = document.querySelector('.canvas');
-canvas.style.width = '100%';
-canvas.style.height = '100%';
-
-canvas.style.width = canvas.width + 'px';
-canvas.width = canvas.offsetWidth;
-// drawGlyphs(currentPage);
-
-var links = document.querySelectorAll('.aside li');
+})({6:[function(require,module,exports) {
 var glyphs = document.querySelector('.glyphs');
-
-function removeSelected() {
-  [].forEach.call(links, function (link) {
-    link.classList.remove('selected');
-  });
-}
-
-function addSelected(link) {
-  link.classList.add('selected');
-}
-
-[].forEach.call(links, function (link, idx) {
-  link.addEventListener('click', function (event) {
-    drawGlyphs(idx);
-    removeSelected();
-    addSelected(event.target);
-  });
-});
+var color = 'DimGrey';
+var size = '96px';
 
 document.querySelector('.font-family-selector').addEventListener('change', function (event) {
-  glyphs.style.fontFamily = event.target.value;
+  opentype.load('/fonts/' + event.target.value + '-Regular.ttf', function (err, font) {
+    if (err) {
+      console.log(err);
+    }
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode('\n        @font-face {\n          font-family: Lato;\n          src: url(/fonts/' + event.target.value + '-Regular.ttf);\n        }\n      '));
+    document.head.appendChild(style);
+    showFont(font);
+  });
 });
 
 document.querySelector('.font-size-selector').addEventListener('change', function (event) {
-  glyphs.style.fontSize = event.target.value;
+  var x = event.target.value;
+  glyphs.style.fontSize = x;
+  size = parseInt(x) + parseInt(x) + 'px';
+  console.log(size);
+  document.querySelectorAll('.glyph').forEach(function (g) {
+    g.style.maxWidth = size;
+    g.style.minWidth = size;
+    g.style.maxHeight = size;
+    g.style.minHeight = size;
+  });
 });
 
 document.querySelector('.color-selector').addEventListener('change', function (event) {
-  glyphs.style.color = event.target.value;
+  color = event.target.value;
+  glyphs.style.color = color;
 });
 
 document.querySelector('.file-reader').addEventListener('change', function (event) {
   var file = event.target.files[0];
   if (file) {
-    var font = void 0;
     var arrayReader = new FileReader();
-    arrayReader.onload = function (event) {
-      font = opentype.parse(event.target.result);
-
-      var t0 = performance.now();
-
-      var str = '';
-      for (var i = 0; i < 16 * 16 * 16 * 16; i++) {
-        str += String.fromCharCode(i);
-      }
-      var glyphsUnfiltered = font.stringToGlyphs(str);
-      var glyphs = glyphsUnfiltered.filter(function (glyph) {
-        return glyph.unicode !== undefined;
-      });
-
-      var t1 = performance.now();
-      console.log(glyphs);
-      console.log(t1 - t0);
-
-      var spacing = 75;
-      var x = spacing;
-      var y = spacing;
-      var width = canvas.width - spacing - spacing;
-
-      var height = 300 + spacing * (glyphs.length / (width / spacing));
-      canvas.style.height = height + 'px';
-      canvas.height = height;
-      var ctx = canvas.getContext('2d');
-      glyphs.forEach(function (glyph, index) {
-        if (x > width) {
-          console.log('down');
-          y += spacing;
-          x = spacing;
-        }
-        x += spacing;
-        glyph.draw(ctx, x, y);
-      });
-    };
     arrayReader.readAsArrayBuffer(file);
-
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.addEventListener('load', function() {
-    //       const style = document.createElement('style');
-    //       style.type = 'text/css';
-    //       style.appendChild(document.createTextNode(`
-    //         @font-face {
-    //           font-family: "${file.name}";
-    //           src: url(${reader.result}) format("woff");
-    //         }
-    //       `));
-    //       document.head.appendChild(style);
-    //       glyphs.style.fontFamily = `"${file.name}"`;
-    //     });
+    arrayReader.onload = function (event) {
+      var font = void 0;
+      try {
+        font = opentype.parse(event.target.result);
+      } catch (err) {
+        font = { supported: false };
+      }
+      showFont(font);
+    };
   }
 });
-},{}],14:[function(require,module,exports) {
+
+function showFont(font) {
+  if (!font.supported) {
+    glyphs.style.color = 'tomato';
+    glyphs.style.fontFamily = '"Helvetica Neue", Helvetica, Arial';
+    glyphs.innerHTML = 'Invalid font file or unsupported format';
+    return;
+  }
+  var charCodes = Object.values(font.glyphs.glyphs).filter(function (glyph) {
+    return glyph.unicode !== undefined;
+  }).map(function (g) {
+    return g.unicode;
+  });
+  var fontName = Object.values(font.names.fontFamily)[0];
+
+  var inner = charCodes.map(function (charCode) {
+    return '<span class="glyph" data-unicode="' + charCode + '">' + String.fromCharCode(charCode) + '</span>';
+  }).join('\t');
+  glyphs.innerHTML = inner;
+
+  var fontFace = new window.FontFace(fontName, event.target.result);
+  console.log(fontName);
+  document.fonts.add(fontFace);
+
+  document.querySelectorAll('.glyph').forEach(function (g) {
+    g.style.maxWidth = size;
+    g.style.minWidth = size;
+    g.style.maxHeight = size;
+    g.style.minHeight = size;
+
+    g.addEventListener('mouseover', function (event) {
+      var unicode = event.target.dataset.unicode;
+      var details = document.querySelector('.details');
+      details.style.visibility = 'visible';
+      details.innerHTML = unicode;
+      details.style.top = event.clientY + 'px';
+      details.style.left = event.clientX + 'px';
+    });
+  });
+  glyphs.style.color = color;
+  glyphs.style.fontFamily = fontName;
+}
+},{}],17:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -260,7 +221,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50862' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62651' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -401,5 +362,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[14,3], null)
+},{}]},{},[17,6], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map

@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Glyph Viewer</title>
-
     <link href="/fontviewer.bb0ba191.css" rel="stylesheet">
   <script src="/fontviewer.bb0ba191.js"></script></head>
   <body>
@@ -13,15 +12,9 @@
         <h1>Glyph Viewer</h1>
         <div>
           <select class="font-family-selector">
-            <option>Arial</option>
-            <option>Courier New</option>
-            <option>Georgia</option>
-            <option>Impact</option>
-            <option>Symbol</option>
-            <option>Times New Roman</option>
-            <option>Trebuchet</option>
-            <option>Verdana</option>
-            <option>Webdings</option>
+            <option>Gaegu</option>
+            <option>Lato</option>
+            <option>Monoton</option>
           </select>
           <select class="font-size-selector">
             <option>10px</option>
@@ -179,28 +172,12 @@
         <input class="file-reader" type="file">
       </header>
       <aside class="aside">
-        <ul>
-          <li class="selected">0x0000 - 0x0fff</li>
-          <li>0x1000 - 0x1fff</li>
-          <li>0x2000 - 0x2fff</li>
-          <li>0x3000 - 0x3fff</li>
-          <li>0x4000 - 0x4fff</li>
-          <li>0x5000 - 0x5fff</li>
-          <li>0x6000 - 0x6fff</li>
-          <li>0x7000 - 0x7fff</li>
-          <li>0x8000 - 0x8fff</li>
-          <li>0x9000 - 0x9fff</li>
-          <li>0xa000 - 0xafff</li>
-          <li>0xb000 - 0xbfff</li>
-          <li>0xc000 - 0xcfff</li>
-          <li>0xd000 - 0xdfff</li>
-          <li>0xe000 - 0xefff</li>
-          <li>0xf000 - 0xffff</li>
-        </ul>
       </aside>
+      <div class="details">
+        unicode
+      </div>
       <article class="main">
-        <p class="glyphs"></p>
-        <canvas class="canvas" width="1000" height="1000"></canvas>
+        <div class="glyphs"></div>
       </article>
     </div>
   </body>
