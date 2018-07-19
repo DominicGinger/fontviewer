@@ -14,7 +14,7 @@ body {
 
 @font-face {
   font-family: Lato;
-  src: url(/Lato-Regular.ttf); }
+  src: url(/fonts/Lato-Regular.ttf); }
 
 @font-face {
   font-family: Monoton;
@@ -31,20 +31,22 @@ body {
 .main {
   text-align: left;
   flex: 3 0px;
-  padding-left: 250px; }
+  padding-left: 250px;
+  color: Dimgrey; }
 
 .aside {
   background: deepskyblue;
   color: white;
   position: fixed;
   min-height: 100%;
+  max-height: 100%;
   width: 200px;
-  flex: 1 auto;
   font-family: monospace;
   line-height: 2rem;
   text-align: left;
   border-right: lightblue solid 2px;
-  border-left: lightblue solid 2px; }
+  border-left: lightblue solid 2px;
+  overflow: auto; }
   .aside ul {
     list-style-type: none; }
     .aside ul li:hover {
@@ -71,22 +73,55 @@ body {
 .glyphs {
   font-family: initial;
   font-size: 48px;
-  color: Dimgrey;
   word-wrap: break-word;
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  cursor: default;
+  justify-content: center; }
   .glyphs .glyph {
     flex: 1;
     min-width: 96px;
     max-width: 96px;
     min-height: 96px;
-    max-height: 96px; }
-    .glyphs .glyph:hover {
-      cursor: pointer; }
+    max-height: 96px;
+    cursor: default;
+    border: 1px solid black;
+    line-height: 2em;
+    text-align: center; }
 
 .details {
+  border: 1px solid black;
   visibility: hidden;
   position: absolute;
-  top: 50px;
-  left: 200px;
-  z-index: 10; }
+  z-index: 10;
+  cursor: default;
+  background-color: #f7f8fc;
+  text-align: center;
+  padding: 15px; }
+  .details .char {
+    font-size: 75px; }
+  .details.trans {
+    transition: transform .6s;
+    transform: scale(1.1); }
+
+.file-reader-container {
+  display: inline-block; }
+  .file-reader-container .file-reader-wrapper {
+    position: relative; }
+    .file-reader-container .file-reader-wrapper .file-reader {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      right: 0px; }
+      .file-reader-container .file-reader-wrapper .file-reader:hover {
+        cursor: pointer; }
+    .file-reader-container .file-reader-wrapper .file-reader + label {
+      display: inline-block;
+      border: 2px black dotted;
+      padding: 55px;
+      width: 650px;
+      font-size: 38px; }
+    .file-reader-container .file-reader-wrapper .file-reader + label {
+      cursor: pointer; }

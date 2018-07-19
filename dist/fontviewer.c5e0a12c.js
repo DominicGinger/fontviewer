@@ -98,41 +98,38 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({6:[function(require,module,exports) {
+})({3:[function(require,module,exports) {
 var glyphs = document.querySelector('.glyphs');
 var color = 'DimGrey';
-var size = '96px';
+var fontFamily = void 0;
+var fonts = [];
 
-document.querySelector('.font-family-selector').addEventListener('change', function (event) {
-  opentype.load('/fonts/' + event.target.value + '-Regular.ttf', function (err, font) {
+document.querySelectorAll('.fonts .font').forEach(function (el) {
+  return el.addEventListener('click', selectFont);
+});
+
+function selectFont(event) {
+  document.querySelectorAll('.fonts .font').forEach(function (el) {
+    return el.classList.remove('selected');
+  });
+  event.target.classList.add('selected');
+  var fontName = event.target.textContent;
+  if (fonts.includes(fontName)) {
+    glyphs.style.fontFamily = fontName;
+    return;
+  }
+  opentype.load('/fonts/' + fontName + '-Regular.ttf', function (err, font) {
     if (err) {
       console.log(err);
     }
     var style = document.createElement('style');
     style.type = 'text/css';
-    style.appendChild(document.createTextNode('\n        @font-face {\n          font-family: Lato;\n          src: url(/fonts/' + event.target.value + '-Regular.ttf);\n        }\n      '));
+    style.appendChild(document.createTextNode('\n        @font-face {\n          font-family: ' + fontName + ';\n          src: url(/fonts/' + fontName + '-Regular.ttf);\n        }\n      '));
     document.head.appendChild(style);
     showFont(font);
+    fonts.push(fontName);
   });
-});
-
-document.querySelector('.font-size-selector').addEventListener('change', function (event) {
-  var x = event.target.value;
-  glyphs.style.fontSize = x;
-  size = parseInt(x) + parseInt(x) + 'px';
-  console.log(size);
-  document.querySelectorAll('.glyph').forEach(function (g) {
-    g.style.maxWidth = size;
-    g.style.minWidth = size;
-    g.style.maxHeight = size;
-    g.style.minHeight = size;
-  });
-});
-
-document.querySelector('.color-selector').addEventListener('change', function (event) {
-  color = event.target.value;
-  glyphs.style.color = color;
-});
+}
 
 document.querySelector('.file-reader').addEventListener('change', function (event) {
   var file = event.target.files[0];
@@ -147,14 +144,22 @@ document.querySelector('.file-reader').addEventListener('change', function (even
         font = { supported: false };
       }
       showFont(font);
+      var fontList = document.querySelectorAll('.fonts .font');
+      fontList[fontList.length - 1].addEventListener('click', selectFont);
+      fontList.forEach(function (el) {
+        return el.classList.remove('selected');
+      });
+      fontList[fontList.length - 1].classList.add('selected');
     };
   }
 });
 
 function showFont(font) {
+  document.querySelector('.details').style.visibility = 'hidden';
   if (!font.supported) {
+    fontFamily = '"Helvetica Neue", Helvetica, Arial';
     glyphs.style.color = 'tomato';
-    glyphs.style.fontFamily = '"Helvetica Neue", Helvetica, Arial';
+    glyphs.style.fontFamily = fontFamily;
     glyphs.innerHTML = 'Invalid font file or unsupported format';
     return;
   }
@@ -163,36 +168,54 @@ function showFont(font) {
   }).map(function (g) {
     return g.unicode;
   });
-  var fontName = Object.values(font.names.fontFamily)[0];
+  fontFamily = Object.values(font.names.fontFamily)[0];
 
   var inner = charCodes.map(function (charCode) {
     return '<span class="glyph" data-unicode="' + charCode + '">' + String.fromCharCode(charCode) + '</span>';
   }).join('\t');
   glyphs.innerHTML = inner;
 
-  var fontFace = new window.FontFace(fontName, event.target.result);
-  console.log(fontName);
+  var fontFace = new window.FontFace(fontFamily, event.target.result);
   document.fonts.add(fontFace);
 
   document.querySelectorAll('.glyph').forEach(function (g) {
-    g.style.maxWidth = size;
-    g.style.minWidth = size;
-    g.style.maxHeight = size;
-    g.style.minHeight = size;
-
-    g.addEventListener('mouseover', function (event) {
-      var unicode = event.target.dataset.unicode;
-      var details = document.querySelector('.details');
-      details.style.visibility = 'visible';
-      details.innerHTML = unicode;
-      details.style.top = event.clientY + 'px';
-      details.style.left = event.clientX + 'px';
-    });
+    g.addEventListener('mousemove', showDetails);
+    g.addEventListener('touchmove', showDetails);
   });
   glyphs.style.color = color;
-  glyphs.style.fontFamily = fontName;
+  glyphs.style.fontFamily = fontFamily;
+
+  var li = document.createElement('li');
+  li.classList.add('font');
+  li.innerHTML = fontFamily;
+  fonts.push(fontFamily);
+  document.querySelector('.fonts').appendChild(li);
 }
-},{}],17:[function(require,module,exports) {
+
+function showDetails(event) {
+  var unicode = event.target.dataset.unicode;
+  var details = document.querySelector('.details');
+  var unicodeBox = details.querySelector('.unicode');
+  var decimalBox = details.querySelector('.decimal');
+  var htmlCodeBox = details.querySelector('.html');
+  var charBox = details.querySelector('.char');
+
+  details.style.visibility = 'hidden';
+  details.classList.remove('trans');
+  setTimeout(function () {
+    details.style.visibility = 'visible';
+    details.style.top = event.pageY - 75 + 'px';
+    details.style.left = event.pageX - 75 + 'px';
+    unicodeBox.innerHTML = '0x' + ('0000' + parseInt(unicode).toString(16)).slice(-4);
+    decimalBox.innerHTML = unicode;
+    htmlCodeBox.innerHTML = '&amp;#' + unicode + ';';
+    charBox.style.fontFamily = fontFamily;
+    charBox.innerHTML = String.fromCharCode(unicode);
+
+    details.classList.add('trans');
+  }, 1);
+}
+},{}],6:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -221,7 +244,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62651' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60177' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -362,5 +385,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[17,6], null)
+},{}]},{},[6,3], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map
