@@ -31,8 +31,11 @@ body {
 .main {
   text-align: left;
   flex: 3 0px;
-  padding-left: 250px;
+  margin-left: 254px;
   color: Dimgrey; }
+
+.header {
+  margin-left: 254px; }
 
 .aside {
   background: deepskyblue;
@@ -55,14 +58,28 @@ body {
     .aside ul li.selected {
       color: hotpink; }
 
+.mobile-button {
+  display: none;
+  max-width: 80px;
+  left: calc(50% - 40px); }
+
 @media all and (max-width: 800px) {
   body {
     padding: 0px; }
+  .header {
+    margin-left: 0px; }
+  .file-label {
+    visibility: hidden; }
+  .mobile-button {
+    display: inline-block; }
+  .desktop-button {
+    display: none; }
   .aside {
     flex: 1 100%;
     position: relative;
     text-align: center;
-    border: none; }
+    border: none;
+    margin-left: 0px; }
     .aside ul li.selected {
       color: white;
       background-color: hotpink; }
@@ -101,13 +118,18 @@ body {
   .details .char {
     font-size: 75px; }
   .details.trans {
-    transition: transform .6s;
-    transform: scale(1.1); }
+    transform: scale(1.05); }
 
 .file-reader-container {
   display: inline-block; }
   .file-reader-container .file-reader-wrapper {
-    position: relative; }
+    position: relative;
+    padding-top: 25px;
+    padding-bottom: 85px;
+    padding-left: 30%;
+    padding-right: 30%;
+    border: 2px black dotted;
+    max-width: 650px; }
     .file-reader-container .file-reader-wrapper .file-reader {
       opacity: 0;
       width: 100%;
@@ -119,9 +141,20 @@ body {
         cursor: pointer; }
     .file-reader-container .file-reader-wrapper .file-reader + label {
       display: inline-block;
-      border: 2px black dotted;
-      padding: 55px;
-      width: 650px;
-      font-size: 38px; }
-    .file-reader-container .file-reader-wrapper .file-reader + label {
-      cursor: pointer; }
+      width: 100%;
+      min-height: 100px;
+      max-height: 100px;
+      font-size: 30px; }
+  .file-reader-container .desktop-button {
+    width: 175px;
+    left: calc(50% - 80px); }
+  .file-reader-container button {
+    position: absolute;
+    top: 130px;
+    z-index: -1;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 3px 6px;
+    background: deepskyblue;
+    color: white;
+    height: 54px;
+    font-size: 18px; }

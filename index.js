@@ -74,6 +74,7 @@ function showFont(font) {
     g.addEventListener('mousemove', showDetails);
     g.addEventListener('touchmove', showDetails);
   });
+
   glyphs.style.color = color;
   glyphs.style.fontFamily = fontFamily;
 
@@ -96,8 +97,8 @@ function showDetails(event) {
   details.classList.remove('trans');
   setTimeout(() => {
     details.style.visibility = 'visible';
-    details.style.top = `${event.pageY-75}px`;
-    details.style.left = `${event.pageX-75}px`;
+    details.style.top = `${event.target.offsetTop-50}px`;
+    details.style.left = `${event.target.offsetLeft-15}px`;
     unicodeBox.innerHTML = '0x' + ('0000' + parseInt(unicode).toString(16)).slice(-4);
     decimalBox.innerHTML = unicode;
     htmlCodeBox.innerHTML = `&amp;#${unicode};`;
@@ -105,5 +106,7 @@ function showDetails(event) {
     charBox.innerHTML = String.fromCharCode(unicode);
 
     details.classList.add('trans');
+
+    details.addEventListener('mouseleave', () => details.style.visibility = 'hidden');
   }, 1);
 }

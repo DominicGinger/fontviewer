@@ -182,6 +182,7 @@ function showFont(font) {
     g.addEventListener('mousemove', showDetails);
     g.addEventListener('touchmove', showDetails);
   });
+
   glyphs.style.color = color;
   glyphs.style.fontFamily = fontFamily;
 
@@ -204,8 +205,8 @@ function showDetails(event) {
   details.classList.remove('trans');
   setTimeout(function () {
     details.style.visibility = 'visible';
-    details.style.top = event.pageY - 75 + 'px';
-    details.style.left = event.pageX - 75 + 'px';
+    details.style.top = event.target.offsetTop - 50 + 'px';
+    details.style.left = event.target.offsetLeft - 15 + 'px';
     unicodeBox.innerHTML = '0x' + ('0000' + parseInt(unicode).toString(16)).slice(-4);
     decimalBox.innerHTML = unicode;
     htmlCodeBox.innerHTML = '&amp;#' + unicode + ';';
@@ -213,6 +214,10 @@ function showDetails(event) {
     charBox.innerHTML = String.fromCharCode(unicode);
 
     details.classList.add('trans');
+
+    details.addEventListener('mouseleave', function () {
+      return details.style.visibility = 'hidden';
+    });
   }, 1);
 }
 },{}],6:[function(require,module,exports) {
@@ -244,7 +249,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60177' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62981' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
