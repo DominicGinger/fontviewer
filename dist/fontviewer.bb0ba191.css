@@ -1,7 +1,7 @@
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial;
   font-size: 14px;
-  color: #6b747c;
+  color: #3e3e3e;
   background-color: #f7f8fc;
   background: linear-gradient(to top left, #f7f8fc, rgba(0, 151, 230, 0.2) 500%);
   margin: 0px;
@@ -32,10 +32,16 @@ body {
   text-align: left;
   flex: 3 0px;
   margin-left: 254px;
-  color: Dimgrey; }
+  color: #3e3e3e; }
 
 .header {
   margin-left: 254px; }
+  .header h1 {
+    color: deepskyblue;
+    box-shadow: hotpink 10px 10px;
+    font-size: 4rem;
+    margin: auto;
+    margin-bottom: 3rem; }
 
 .aside {
   background: deepskyblue;
@@ -58,22 +64,14 @@ body {
     .aside ul li.selected {
       color: hotpink; }
 
-.mobile-button {
-  display: none;
-  max-width: 80px;
-  left: calc(50% - 40px); }
-
 @media all and (max-width: 800px) {
   body {
     padding: 0px; }
   .header {
     margin-left: 0px; }
-  .file-label {
-    visibility: hidden; }
-  .mobile-button {
-    display: inline-block; }
-  .desktop-button {
-    display: none; }
+  .file-reader-container {
+    min-width: 100% !important;
+    max-width: 100% !important; }
   .aside {
     flex: 1 100%;
     position: relative;
@@ -85,7 +83,8 @@ body {
       background-color: hotpink; }
   .main {
     flex: 1 100%;
-    padding-left: 10px; } }
+    padding-left: 10px;
+    margin-left: 0px; } }
 
 .glyphs {
   font-family: initial;
@@ -126,8 +125,8 @@ body {
     position: relative;
     padding-top: 25px;
     padding-bottom: 85px;
-    padding-left: 30%;
-    padding-right: 30%;
+    padding-left: 7vw;
+    padding-right: 7vw;
     border: 2px black dotted;
     max-width: 650px; }
     .file-reader-container .file-reader-wrapper .file-reader {
@@ -145,10 +144,13 @@ body {
       min-height: 100px;
       max-height: 100px;
       font-size: 30px; }
-  .file-reader-container .desktop-button {
-    width: 175px;
-    left: calc(50% - 80px); }
+    .file-reader-container .file-reader-wrapper:hover button {
+      top: 128px; }
+    .file-reader-container .file-reader-wrapper:active button {
+      top: 132px; }
   .file-reader-container button {
+    width: 175px;
+    left: calc(50% - 80px);
     position: absolute;
     top: 130px;
     z-index: -1;

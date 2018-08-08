@@ -1,5 +1,5 @@
 const glyphs = document.querySelector('.glyphs');
-let color = 'DimGrey';
+let color = '#3e3e3e';
 let fontFamily;
 const fonts = [];
 
@@ -31,23 +31,29 @@ function selectFont(event) {
   });
 }
 
+function showArrayBuffer(ab) {
+  let font;
+  try {
+    font = opentype.parse(ab);
+  } catch (err) {
+    font = { supported: false };
+  }
+  const fontFamily = showFont(font);
+  const fontList = document.querySelectorAll('.fonts .font');
+  fontList[fontList.length-1].addEventListener('click', selectFont)
+  fontList.forEach(el => el.classList.remove('selected'))
+  fontList[fontList.length-1].classList.add('selected')
+}
+
 document.querySelector('.file-reader').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (file) {
     const arrayReader = new FileReader();
     arrayReader.readAsArrayBuffer(file);
     arrayReader.onload = function(event) {
-      let font;
-      try {
-        font = opentype.parse(event.target.result);
-      } catch (err) {
-        font = { supported: false };
-      }
-      showFont(font);
-      const fontList = document.querySelectorAll('.fonts .font');
-      fontList[fontList.length-1].addEventListener('click', selectFont)
-      fontList.forEach(el => el.classList.remove('selected'))
-      fontList[fontList.length-1].classList.add('selected')
+      showArrayBuffer(event.target.result);
+
+      localStorage.setItem(fontFamily, abToStr(event.target.result));
     }
   }
 });
@@ -83,6 +89,8 @@ function showFont(font) {
   li.innerHTML = fontFamily;
   fonts.push(fontFamily);
   document.querySelector('.fonts').appendChild(li);
+
+  return fontFamily;
 }
 
 function showDetails(event) {
@@ -109,4 +117,24 @@ function showDetails(event) {
 
     details.addEventListener('mouseleave', () => details.style.visibility = 'hidden');
   }, 1);
+}
+
+function abToStr(buf) {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+function strToAb(str) {
+  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i=0, strLen=str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+for (var i = 0; i < localStorage.length; i++) {
+  const key = localStorage.key(i);
+  const value = localStorage.getItem(key);
+  showArrayBuffer(strToAb(value));
+  console.log('Key: ' + key);
 }

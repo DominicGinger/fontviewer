@@ -100,7 +100,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({3:[function(require,module,exports) {
 var glyphs = document.querySelector('.glyphs');
-var color = 'DimGrey';
+var color = '#3e3e3e';
 var fontFamily = void 0;
 var fonts = [];
 
@@ -131,25 +131,31 @@ function selectFont(event) {
   });
 }
 
+function showArrayBuffer(ab) {
+  var font = void 0;
+  try {
+    font = opentype.parse(ab);
+  } catch (err) {
+    font = { supported: false };
+  }
+  var fontFamily = showFont(font);
+  var fontList = document.querySelectorAll('.fonts .font');
+  fontList[fontList.length - 1].addEventListener('click', selectFont);
+  fontList.forEach(function (el) {
+    return el.classList.remove('selected');
+  });
+  fontList[fontList.length - 1].classList.add('selected');
+}
+
 document.querySelector('.file-reader').addEventListener('change', function (event) {
   var file = event.target.files[0];
   if (file) {
     var arrayReader = new FileReader();
     arrayReader.readAsArrayBuffer(file);
     arrayReader.onload = function (event) {
-      var font = void 0;
-      try {
-        font = opentype.parse(event.target.result);
-      } catch (err) {
-        font = { supported: false };
-      }
-      showFont(font);
-      var fontList = document.querySelectorAll('.fonts .font');
-      fontList[fontList.length - 1].addEventListener('click', selectFont);
-      fontList.forEach(function (el) {
-        return el.classList.remove('selected');
-      });
-      fontList[fontList.length - 1].classList.add('selected');
+      showArrayBuffer(event.target.result);
+
+      localStorage.setItem(fontFamily, abToStr(event.target.result));
     };
   }
 });
@@ -191,6 +197,8 @@ function showFont(font) {
   li.innerHTML = fontFamily;
   fonts.push(fontFamily);
   document.querySelector('.fonts').appendChild(li);
+
+  return fontFamily;
 }
 
 function showDetails(event) {
@@ -220,7 +228,27 @@ function showDetails(event) {
     });
   }, 1);
 }
-},{}],6:[function(require,module,exports) {
+
+function abToStr(buf) {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+function strToAb(str) {
+  var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i = 0, strLen = str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+for (var i = 0; i < localStorage.length; i++) {
+  var key = localStorage.key(i);
+  var value = localStorage.getItem(key);
+  showArrayBuffer(strToAb(value));
+  console.log('Key: ' + key);
+}
+},{}],16:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -249,7 +277,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '62981' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58159' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -390,5 +418,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[6,3], null)
+},{}]},{},[16,3], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map
