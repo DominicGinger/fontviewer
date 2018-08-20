@@ -158,6 +158,7 @@ body {
 }
 
 .file-reader-container {
+  width: 100%;
   display: inline-block;
 
   .file-reader-wrapper {
@@ -167,7 +168,6 @@ body {
     padding-left: 7vw;
     padding-right: 7vw;
     border: 2px black dotted;
-    max-width: 650px;
 
     .file-reader {
       opacity: 0;
@@ -214,3 +214,20 @@ body {
   }
 }
 
+.url-input {
+  input {
+    font-size: 38px;
+    color: $text-color;
+    border: $background-color solid 1px;
+    background-color: white;
+    border-radius: 0.2rem;
+    padding: 1rem;
+    padding-left: 2rem;
+
+    max-width: calc(100% - 3rem);
+    width: calc(100% - 3rem);
+    display: block;
+    outline: none;
+    margin-bottom: 30px;
+  }
+}

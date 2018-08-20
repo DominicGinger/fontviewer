@@ -120,6 +120,7 @@ body {
     transform: scale(1.05); }
 
 .file-reader-container {
+  width: 100%;
   display: inline-block; }
   .file-reader-container .file-reader-wrapper {
     position: relative;
@@ -127,8 +128,7 @@ body {
     padding-bottom: 85px;
     padding-left: 7vw;
     padding-right: 7vw;
-    border: 2px black dotted;
-    max-width: 650px; }
+    border: 2px black dotted; }
     .file-reader-container .file-reader-wrapper .file-reader {
       opacity: 0;
       width: 100%;
@@ -160,3 +160,17 @@ body {
     color: white;
     height: 54px;
     font-size: 18px; }
+
+.url-input input {
+  font-size: 38px;
+  color: #3e3e3e;
+  border: #f7f8fc solid 1px;
+  background-color: white;
+  border-radius: 0.2rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  max-width: calc(100% - 3rem);
+  width: calc(100% - 3rem);
+  display: block;
+  outline: none;
+  margin-bottom: 30px; }

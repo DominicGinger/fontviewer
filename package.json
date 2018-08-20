@@ -11,7 +11,7 @@
   "dependencies": {
     "node-sass": "^4.9.0",
     "opentype": "^0.1.2",
-    "opentype.js": "^0.8.0",
-    "uglifyjs": "^2.4.11"
-  }
+    "opentype.js": "^0.8.0"
+  },
+  "devDependencies": {}
 }
