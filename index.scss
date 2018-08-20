@@ -69,8 +69,19 @@ body {
   border-left: lightblue solid 2px;
   overflow: auto;
 
+  img {
+    background: url('./favicon.ico'), white;
+    border-radius: 50%;
+    z-index: 3;
+    width: 128px;
+    height: 128px;
+    transform: scale(0.7);
+    margin-left: 15%;
+  }
+
   ul {
     list-style-type: none;
+    margin-top: 0px;
 
     li {
       &:hover {
@@ -102,7 +113,12 @@ body {
     border: none;
     margin-left: 0px;
 
+    img {
+      display: none;
+    }
+
     ul {
+      margin-top: 1rem;
       li.selected {
         color: white;
         background-color: hotpink;

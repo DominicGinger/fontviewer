@@ -98,7 +98,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({6:[function(require,module,exports) {
+})({8:[function(require,module,exports) {
 var glyphs = document.querySelector('.glyphs');
 var color = '#3e3e3e';
 var fontFamily = void 0;
@@ -304,7 +304,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50869' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58192' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -445,5 +445,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[12,6], null)
+},{}]},{},[12,8], null)
 //# sourceMappingURL=/fontviewer.c5e0a12c.map

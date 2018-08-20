@@ -56,8 +56,17 @@ body {
   border-right: lightblue solid 2px;
   border-left: lightblue solid 2px;
   overflow: auto; }
+  .aside img {
+    background: url("favicon.c376571c.ico"), white;
+    border-radius: 50%;
+    z-index: 3;
+    width: 128px;
+    height: 128px;
+    transform: scale(0.7);
+    margin-left: 15%; }
   .aside ul {
-    list-style-type: none; }
+    list-style-type: none;
+    margin-top: 0px; }
     .aside ul li:hover {
       color: grey;
       cursor: pointer; }
@@ -78,9 +87,13 @@ body {
     text-align: center;
     border: none;
     margin-left: 0px; }
-    .aside ul li.selected {
-      color: white;
-      background-color: hotpink; }
+    .aside img {
+      display: none; }
+    .aside ul {
+      margin-top: 1rem; }
+      .aside ul li.selected {
+        color: white;
+        background-color: hotpink; }
   .main {
     flex: 1 100%;
     padding-left: 10px;
