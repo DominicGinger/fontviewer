@@ -145,8 +145,6 @@ for (var i = 0; i < localStorage.length; i++) {
   const key = localStorage.key(i);
   const value = localStorage.getItem(key);
   showArrayBuffer(strToAb(value), false, true);
-
-  console.log('Key: ' + key);
 }
 document.querySelectorAll('.fonts .font').forEach(el => el.classList.remove('selected'))
 

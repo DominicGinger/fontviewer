@@ -93,6 +93,12 @@ body {
       }
     }
   }
+
+  .give-credit {
+    font-size: 12px;
+    position: absolute;
+    bottom: 10px;
+  }
 }
 
 @media all and (max-width: 800px) {
@@ -119,10 +125,15 @@ body {
 
     ul {
       margin-top: 1rem;
+      margin-bottom: 3rem;
       li.selected {
         color: white;
         background-color: hotpink;
       }
+    }
+
+    .give-credit {
+      text-align: center;
     }
   }
   .main {

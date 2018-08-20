@@ -72,6 +72,10 @@ body {
       cursor: pointer; }
     .aside ul li.selected {
       color: hotpink; }
+  .aside .give-credit {
+    font-size: 12px;
+    position: absolute;
+    bottom: 10px; }
 
 @media all and (max-width: 800px) {
   body {
@@ -90,10 +94,13 @@ body {
     .aside img {
       display: none; }
     .aside ul {
-      margin-top: 1rem; }
+      margin-top: 1rem;
+      margin-bottom: 3rem; }
       .aside ul li.selected {
         color: white;
         background-color: hotpink; }
+    .aside .give-credit {
+      text-align: center; }
   .main {
     flex: 1 100%;
     padding-left: 10px;
